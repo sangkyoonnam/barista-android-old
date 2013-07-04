@@ -17,6 +17,8 @@ import java.util.concurrent.Executors;
 import kr.co.namsang.mb.barista.io.FileCache;
 import kr.co.namsang.mb.barista.io.MemoryCache;
 import kr.co.namsang.mb.barista.util.IOUtils;
+import kr.co.namsang.mb.barista.util.LogUtils;
+import kr.co.namsang.mb.barista.util.UiUtils;
 
 import kr.co.namsang.mb.barista.R;
 
@@ -24,56 +26,55 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.ImageView;
 
-public class ImageLoader {
-    
-    MemoryCache memoryCache=new MemoryCache();
+public class ImageLoader 
+{    
+    MemoryCache memoryCache = new MemoryCache();
     FileCache fileCache;
     private Map<ImageView, String> imageViews=Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
     ExecutorService executorService; 
     
-    public ImageLoader(Context context){
-        fileCache=new FileCache(context);
-        executorService=Executors.newFixedThreadPool(5);
+    public ImageLoader(Context context) {
+        fileCache = new FileCache(context);
+        executorService = Executors.newFixedThreadPool(5);
     }
     
     public static void setStubId(int stubId) {
     	stub_id = stubId;
     }
     
-    public static int stub_id; //R.drawable.stub;
-    public void displayImage(String url, ImageView imageView)
-    {
+    public static int stub_id = R.drawable.stub;
+    public void displayImage(String url, ImageView imageView) {
         imageViews.put(imageView, url);
-        Bitmap bitmap=memoryCache.get(url);
-        if(bitmap!=null)
+        Bitmap bitmap = memoryCache.get(url);
+        if (bitmap != null) {
             imageView.setImageBitmap(bitmap);
-        else
-        {
+        }
+        else {
             queuePhoto(url, imageView);
             imageView.setImageResource(stub_id);
         }
     }
         
-    private void queuePhoto(String url, ImageView imageView)
-    {
-        PhotoToLoad p=new PhotoToLoad(url, imageView);
+    private void queuePhoto(String url, ImageView imageView) {
+        PhotoToLoad p = new PhotoToLoad(url, imageView);
         executorService.submit(new PhotosLoader(p));
     }
     
-    private Bitmap getBitmap(String url) 
-    {
-        File f=fileCache.getFile(url);
+    private Bitmap getBitmap(String url) {
+        File f = fileCache.getFile(url);
         
         //from SD cache
         Bitmap b = decodeFile(f);
-        if(b!=null)
+        if (b!=null)
             return b;
         
         //from web
         try {
-            Bitmap bitmap=null;
+            Bitmap bitmap = null;
             URL imageUrl = new URL(url);
             HttpURLConnection conn = (HttpURLConnection)imageUrl.openConnection();
             conn.setConnectTimeout(30000);
@@ -85,7 +86,8 @@ public class ImageLoader {
             os.close();
             bitmap = decodeFile(f);
             return bitmap;
-        } catch (Exception ex){
+        }
+        catch (Exception ex){
            ex.printStackTrace();
            return null;
         }
@@ -100,22 +102,25 @@ public class ImageLoader {
             BitmapFactory.decodeStream(new FileInputStream(f),null,o);
             
             //Find the correct scale value. It should be the power of 2.
-            final int REQUIRED_SIZE=70;
-            int width_tmp=o.outWidth, height_tmp=o.outHeight;
-            int scale=1;
-            while(true){
-                if(width_tmp/2<REQUIRED_SIZE || height_tmp/2<REQUIRED_SIZE)
+            final int REQUIRED_SIZE = 512;
+            int width_tmp = o.outWidth, height_tmp = o.outHeight;
+            int scale = 1;
+            while (true) {
+                if(width_tmp / 2 < REQUIRED_SIZE 
+                		|| height_tmp / 2 < REQUIRED_SIZE)
                     break;
-                width_tmp/=2;
-                height_tmp/=2;
-                scale*=2;
+                width_tmp /= 2;
+                height_tmp /= 2;
+                scale *= 2;
             }
             
             //decode with inSampleSize
             BitmapFactory.Options o2 = new BitmapFactory.Options();
             o2.inSampleSize=scale;
             return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
-        } catch (FileNotFoundException e) {}
+        }
+        catch (FileNotFoundException e) {}
+        
         return null;
     }
     
@@ -130,7 +135,8 @@ public class ImageLoader {
         }
     }
     
-    class PhotosLoader implements Runnable {
+    class PhotosLoader implements Runnable 
+    {
         PhotoToLoad photoToLoad;
         PhotosLoader(PhotoToLoad photoToLoad){
             this.photoToLoad=photoToLoad;
@@ -138,22 +144,24 @@ public class ImageLoader {
         
         @Override
         public void run() {
-            if(imageViewReused(photoToLoad))
+            if (imageViewReused(photoToLoad))
                 return;
-            Bitmap bmp=getBitmap(photoToLoad.url);
+            Bitmap bmp = getBitmap(photoToLoad.url);
             memoryCache.put(photoToLoad.url, bmp);
-            if(imageViewReused(photoToLoad))
+            if (imageViewReused(photoToLoad))
                 return;
-            BitmapDisplayer bd=new BitmapDisplayer(bmp, photoToLoad);
-            Activity a=(Activity)photoToLoad.imageView.getContext();
+            BitmapDisplayer bd = new BitmapDisplayer(bmp, photoToLoad);
+            Activity a = (Activity)photoToLoad.imageView.getContext();
             a.runOnUiThread(bd);
         }
     }
     
     boolean imageViewReused(PhotoToLoad photoToLoad){
-        String tag=imageViews.get(photoToLoad.imageView);
-        if(tag==null || !tag.equals(photoToLoad.url))
+        String tag = imageViews.get(photoToLoad.imageView);
+        if (tag == null 
+        		|| !tag.equals(photoToLoad.url))
             return true;
+        
         return false;
     }
     
@@ -162,15 +170,25 @@ public class ImageLoader {
     {
         Bitmap bitmap;
         PhotoToLoad photoToLoad;
-        public BitmapDisplayer(Bitmap b, PhotoToLoad p){bitmap=b;photoToLoad=p;}
-        public void run()
-        {
-            if(imageViewReused(photoToLoad))
+        public BitmapDisplayer(Bitmap b, PhotoToLoad p) { bitmap = b; photoToLoad = p; }
+        public void run() {
+            if (imageViewReused(photoToLoad))
                 return;
-            if(bitmap!=null)
+            if (bitmap != null) {
                 photoToLoad.imageView.setImageBitmap(bitmap);
-            else
+                // PagerContainer에 추가된 경우 진저브레드 미만에서 새로 추가된 아이템이
+                // 스크롤 한 경우에만 이미지가 갱신되는 문제가 있어 강제적으로 1픽셀 이동 후 원위치 시킴 
+                if (!UiUtils.isGingerbread()) {
+	                ViewGroup view = (ViewGroup) photoToLoad.imageView.getParent();
+	                if (view != null) {   
+	                	view.scrollBy( 1, 0);
+	                	view.scrollBy(-1, 0);
+	                }
+                }
+            }
+            else { 
                 photoToLoad.imageView.setImageResource(stub_id);
+            }
         }
     }
 

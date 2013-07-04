@@ -30,7 +30,7 @@ public class BNPagerContainer extends FrameLayout implements ViewPager.OnPageCha
     }
  
     private void init() {
-        //Disable clipping of children so non-selected pages are visible
+        // Disable clipping of children so non-selected pages are visible
         setClipChildren(false);
  
         //Child clipping doesn't work with hardware acceleration in Android 3.x/4.x
