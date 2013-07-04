@@ -178,7 +178,7 @@ public class ImageLoader
                 photoToLoad.imageView.setImageBitmap(bitmap);
                 // PagerContainer에 추가된 경우 진저브레드 미만에서 새로 추가된 아이템이
                 // 스크롤 한 경우에만 이미지가 갱신되는 문제가 있어 강제적으로 1픽셀 이동 후 원위치 시킴 
-                if (!UiUtils.isGingerbread()) {
+                if (!UiUtils.isHoneycomb()) {
 	                ViewGroup view = (ViewGroup) photoToLoad.imageView.getParent();
 	                if (view != null) {   
 	                	view.scrollBy( 1, 0);
