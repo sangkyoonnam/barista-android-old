@@ -2,6 +2,8 @@ package kr.co.namsang.mb.barista.util;
 
 import java.util.List;
 
+import kr.co.namsang.mb.barista.data.Version;
+
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -10,31 +12,33 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.telephony.TelephonyManager;
 
-public class SharedUtils 
+public class CommonUtils 
 {
-	private static final String LOG_TAG = LogUtils.makeLogTag(SharedUtils.class);
+	private static final String LOG_TAG = LogUtils.makeLogTag(CommonUtils.class);
 	
 	private static Context sContext;
 	public static void setContext(Context context) {
 		sContext = context;
 	}
 	
-	public static String getBaseIdentifier() {
+	public static String getPackageName() {
     	return sContext.getPackageName();
     }
-	
-    public static String getBaseVersion() {
+    
+    public static Version getVersion() {
     	PackageManager packageManager = sContext.getPackageManager();
-    	
-    	String res = null;
+    	Version version = null;
     	try {
-			res = packageManager.getPackageInfo(getBaseIdentifier(), 0).versionName;
+			String versionName = packageManager.getPackageInfo(getPackageName(), 0).versionName;
+			version = new Version(versionName);
 		}
     	catch (NameNotFoundException e) {
-//			BNLogger.e(TAG, e.getLocalizedMessage());
-		}
-    	
-    	return res;
+			LogUtils.e(LOG_TAG, "error=%s", e.getMessage());
+		}    	
+    	catch (IllegalArgumentException e) {
+    		LogUtils.e(LOG_TAG, "error=%s", e.getMessage());
+    	}
+    	return version;
     }
     
 	public static boolean isRunningProcess(Context context, String packageName) {		 

@@ -38,6 +38,10 @@ public class ImageLoader {
         executorService=Executors.newFixedThreadPool(5);
     }
     
+    public static void setStubId(int stubId) {
+    	stub_id = stubId;
+    }
+    
     public static int stub_id; //R.drawable.stub;
     public void displayImage(String url, ImageView imageView)
     {
