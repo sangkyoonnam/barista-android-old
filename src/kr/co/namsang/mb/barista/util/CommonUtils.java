@@ -10,6 +10,7 @@ import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Build;
 import android.telephony.TelephonyManager;
 
 public class CommonUtils 
@@ -69,4 +70,16 @@ public class CommonUtils
 		TelephonyManager tm = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
 		return tm.getCallState();
 	}
+	
+    public static boolean isGingerbread() {
+        // Can use static final constants like HONEYCOMB, declared in later versions
+        // of the OS since they are inlined at compile time. This is guaranteed behavior.
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD;
+    }
+
+    public static boolean isHoneycomb() {
+        // Can use static final constants like HONEYCOMB, declared in later versions
+        // of the OS since they are inlined at compile time. This is guaranteed behavior.
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
+    }
 }

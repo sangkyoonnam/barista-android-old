@@ -1,9 +1,11 @@
+
 package kr.co.namsang.mb.barista.app;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import kr.co.namsang.mb.barista.R;
+import kr.co.namsang.mb.barista.util.LogUtils;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -14,12 +16,13 @@ import android.view.ViewGroup;
 public class BNNavigationFragment extends BNFragment 
 {
 	// 태그		
-	public static final String LOG_TAG = BNNavigationFragment.class.getSimpleName();
+	@SuppressWarnings("unused")
+	private static final String LOG_TAG = LogUtils.makeLogTag(BNNavigationFragment.class);
     
-	protected NavigationGroup navigationGroup = new NavigationGroup();	
+	public NavigationGroup navigationGroup = new NavigationGroup();	
 	
-	//
-    protected View mRootView;     
+	//-- --//
+    private View mRootView;     
 	
     @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {		    	
@@ -64,10 +67,6 @@ public class BNNavigationFragment extends BNFragment
 		
         prepareToLoad(); 
 	}
-	
-	public void prepareToLoad() {
-		// 
-	}	
 	
 	public void initRootFragment(BNFragment fragment) {
 		navigationGroup = new NavigationGroup();
@@ -123,12 +122,13 @@ public class BNNavigationFragment extends BNFragment
 		}
 	}
 	
-	public void popRootFragment(boolean animated)
-	{
-		if (navigationGroup.getLevel() > 0) 
-		{
-//			BNLog.i(LOG_TAG, "pop to fragment");
-			
+	/**
+	 * 첫번쨰 프래그먼트로 네비게이션 이동
+	 * 
+	 * @param animated
+	 */
+	public void popRootFragment(boolean animated) {
+		if (navigationGroup.getLevel() > 0)  {
 			while (navigationGroup.getLevel() > 0)
 				navigationGroup.removeLastFragment();	
 			
@@ -146,25 +146,56 @@ public class BNNavigationFragment extends BNFragment
 		}
 	}
 	
+	// TODO: navigationGroup을 public으로 변경하였기 때문에 불필요, 추후 삭제
 	public int getLevel() {
 		return navigationGroup.getLevel();
 	}
 	
-	public class NavigationGroup {
+	/**
+	 * 
+	 * @author sangkyoonnam
+	 *
+	 */
+	public class NavigationGroup 
+	{
 		protected List<BNFragment> stack = new ArrayList<BNFragment>();
 		
-		public void addFragment(BNFragment frag) {
-			stack.add(frag);
+		/**
+		 * 프래그먼트를 스택에 추가
+		 * add fragment to stack
+		 * 
+		 * @param fragment
+		 */
+		public void addFragment(BNFragment fragment) {
+			stack.add(fragment);
 		}
 		
+		/**
+		 * 마지막에 추가된 프래그먼트를 스택에서 제거
+		 * remove last fragment at stack
+		 * 
+		 * @param fragment
+		 */
 		public void removeLastFragment() {
 			stack.remove(getLevel());
 		}
 		
+		/**
+		 * 스택의 현재 레벨을 반환
+		 * get current stack level
+		 * 
+		 * @return level
+		 */
 		public int getLevel() {
 			return stack.size() - 1;
 		}
 		
+		/**
+		 * 최신 프래그먼트 반환
+		 * get latest added fragment
+		 * 
+		 * @return fragment
+		 */
 		public BNFragment getLastFragment() {
 			int lvl = getLevel();
 			if (lvl >= 0)

@@ -1,15 +1,28 @@
 package kr.co.namsang.mb.barista.app;
 
+import kr.co.namsang.mb.barista.util.LogUtils;
+
 import android.support.v4.app.Fragment;
 
 public class BNFragment extends Fragment 
 {	
 	// 태그
-	public static final String LOG_TAG = BNFragment.class.getSimpleName();
+	@SuppressWarnings("unused")
+	private static final String LOG_TAG = LogUtils.makeLogTag(BNFragment.class);
 	
-	public BNNavigationFragment navigationFragment;	
+	public BNNavigationFragment navigationFragment;  // 네비게이션
 	
-	public void reloadData() {
-		
-	}
+	//-- --//	
+    public void initLayout() {
+		retrieveUiObjRefs();
+		registerUiActionHandler();
+    }
+    
+    //-- --// 
+    public void retrieveUiObjRefs() {}    
+    public void registerUiActionHandler() {}    
+
+    public void prepareToLoad() {}    
+
+    public void reloadData() {}
 }
