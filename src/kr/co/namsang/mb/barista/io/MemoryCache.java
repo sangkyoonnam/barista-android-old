@@ -10,7 +10,8 @@ public class MemoryCache
     private HashMap<String, SoftReference<Bitmap>> cache = new HashMap<String, SoftReference<Bitmap>>();
     
     public Bitmap get(String id) {
-        if (cache.containsKey(id) == true) {
+        if (id != null
+        		&& cache.containsKey(id) == true) {
         	SoftReference<Bitmap> ref = cache.get(id);
         	return ref.get();
         }
