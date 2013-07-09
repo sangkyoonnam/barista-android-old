@@ -34,8 +34,10 @@ public class ImageLoader
 {    
     MemoryCache memoryCache = new MemoryCache();
     FileCache fileCache;
-    private Map<ImageView, String> imageViews=Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
+    private Map<ImageView, String> imageViews = Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
     ExecutorService executorService; 
+    
+    private boolean bHideStub = false;
     
     public ImageLoader(Context context) {
         fileCache = new FileCache(context);
@@ -44,6 +46,10 @@ public class ImageLoader
     
     public static void setStubId(int stubId) {
     	stub_id = stubId;
+    }
+    
+    public void setStubEnable(boolean enable) {
+    	bHideStub = !enable;
     }
     
     public static int stub_id = R.drawable.stub;
@@ -55,7 +61,8 @@ public class ImageLoader
         }
         else {
             queuePhoto(url, imageView);
-            imageView.setImageResource(stub_id);
+            if (!bHideStub)
+            	imageView.setImageResource(stub_id);
         }
     }
         
@@ -187,7 +194,8 @@ public class ImageLoader
                 }
             }
             else { 
-                photoToLoad.imageView.setImageResource(stub_id);
+            	if (!bHideStub)
+            		photoToLoad.imageView.setImageResource(stub_id);
             }
         }
     }
