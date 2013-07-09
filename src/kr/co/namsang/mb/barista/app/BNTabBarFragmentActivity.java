@@ -40,18 +40,20 @@ public class BNTabBarFragmentActivity extends BNFragmentActivity
 		mTabHost = (TabHost)findViewById(android.R.id.tabhost);
 		mTabHost.setup();
 		
-        mTabManager = new TabManager(this, mTabHost, R.id.realtabcontent);
-        
-        if (savedInstanceState != null) {        
-        	mTabHost.setCurrentTabByTag(savedInstanceState.getString(CURRENT_TAB));
-        } 
+        mTabManager = new TabManager(this, mTabHost, R.id.realtabcontent);        
 	}
 	
+	// This is supposed to work around a bug causing crashes for
+	// java.lang.IllegalStateException: Can not perform this action after onSaveInstanceState
+//	@Override
+//	protected void onSaveInstanceState(Bundle outState) {
+//		outState.putString("WORKAROUND_FOR_BUG_19917_KEY", "WORKAROUND_FOR_BUG_19917_VALUE");
+//		super.onSaveInstanceState(outState);
+//	}
+	
 	@Override
-	protected void onSaveInstanceState(Bundle outState) 
-	{
-		outState.putString(CURRENT_TAB, mTabHost.getCurrentTabTag());  //save the tab selected
-		super.onSaveInstanceState(outState);
+	protected void onSaveInstanceState(Bundle outState) {
+		// No call for super(). Bug on API Level > 11.
 	}
 	
 	public void initLayout() 
