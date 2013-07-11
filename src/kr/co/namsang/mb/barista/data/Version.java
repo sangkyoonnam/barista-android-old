@@ -23,9 +23,10 @@ public class Version implements Comparable<Version>
 	public Version(String version)
 			throws IllegalArgumentException {
 		if (version == null)
-			throw new IllegalArgumentException("version can not be null");
-		if (!version.matches("[0-9]+(\\.[0-9]+)*")) 
-			throw new IllegalArgumentException("invalid format");
+			throw new IllegalArgumentException("version can not be null");		
+		// FIXED: 갤럭시S2 젤리빈에서 정규표현식을 파싱하지 못하는 문제 발생하여 삭제
+//		if (!version.matches("[0-9]+(\\.[0-9]+)*")) 
+//			throw new IllegalArgumentException("invalid format");
 
 		this.version = version;
 	}
@@ -83,5 +84,4 @@ public class Version implements Comparable<Version>
         }
         return sb.toString();
     }
-
 }

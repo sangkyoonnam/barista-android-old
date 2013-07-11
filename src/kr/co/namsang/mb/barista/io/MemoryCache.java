@@ -13,7 +13,8 @@ public class MemoryCache
         if (id != null
         		&& cache.containsKey(id) == true) {
         	SoftReference<Bitmap> ref = cache.get(id);
-        	return ref.get();
+        	if (ref != null)  // TODO: 추후 null이 되는 경우 확인
+        		return ref.get();
         }
         
         return null;
