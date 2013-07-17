@@ -13,7 +13,7 @@ public class BNFragment extends Fragment
 	public BNNavigationFragment navigationFragment;  // 네비게이션
 	
 	//-- --//	
-    public void initLayout() {
+    public void initLayout() {  // UI 오브젝트 연결과 이벤트를 분리
 		retrieveUiObjRefs();
 		registerUiActionHandler();
     }

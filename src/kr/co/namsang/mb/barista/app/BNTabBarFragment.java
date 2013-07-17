@@ -40,7 +40,13 @@ public class BNTabBarFragment extends BNFragment
     	
     	mRootView = inflater.inflate(R.layout.fragment_tabbar, null); 	
     	mParentActivity = (BNFragmentActivity)getActivity();
-		initLayout();
+		
+    	if (mRootView != null) {
+			mTabHost = (TabHost)mRootView.findViewById(android.R.id.tabhost);
+			mTabHost.setup();
+			
+	        mTabManager = new TabManager(getActivity(), mTabHost, R.id.realtabcontent);
+    	}
 		
 		return mRootView;
 	}
@@ -56,10 +62,7 @@ public class BNTabBarFragment extends BNFragment
 	
 	public void initLayout() 
 	{		
-		mTabHost = (TabHost)mRootView.findViewById(android.R.id.tabhost);
-		mTabHost.setup();
-		
-        mTabManager = new TabManager(getActivity(), mTabHost, R.id.realtabcontent);
+
 	}
 	
 	public void prepareToLoad()
