@@ -388,6 +388,16 @@ public class CirclePageIndicator extends View implements PageIndicator {
     @Override
     public void onPageScrollStateChanged(int state) {
         mScrollState = state;
+        
+//        if (state == ViewPager.SCROLL_STATE_IDLE) {
+//            int curr = mViewPager.getCurrentItem();
+//            int lastReal = mViewPager.getAdapter().getCount() - 1;
+//            if (curr == 0) {
+//            	mViewPager.setCurrentItem(lastReal, false);
+//            } else if (curr > lastReal) {
+//            	mViewPager.setCurrentItem(0, false);
+//            }
+//        }
 
         if (mListener != null) {
             mListener.onPageScrollStateChanged(state);
