@@ -39,6 +39,11 @@ public class ImageLoader
     
     private boolean bHideStub = false;
     
+    public static void displayImage(Context context, String url, ImageView imageView) {
+    	ImageLoader imageLoader = new ImageLoader(context);
+    	imageLoader.displayImage(url,  imageView);
+    }
+    
     public ImageLoader(Context context) {
         fileCache = new FileCache(context);
         executorService = Executors.newFixedThreadPool(5);
