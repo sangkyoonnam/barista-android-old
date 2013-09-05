@@ -185,6 +185,38 @@ public class BNTabBarFragmentActivity extends BNFragmentActivity
 			});
         }
         
+        public void addTab(BNTabBarItem tabBarItem, Class<?> clss, Bundle args) {
+        	
+        	final Integer index = mTabHost.getTabWidget().getChildCount();
+
+        	TabInfo info = new TabInfo(index.toString(), clss, args);
+        	info.fragment = mActivity.getSupportFragmentManager().findFragmentByTag(index.toString());
+            if (info.fragment != null && !info.fragment.isDetached()) 
+            {
+                FragmentTransaction ft = mActivity.getSupportFragmentManager().beginTransaction();
+                ft.detach(info.fragment);
+                ft.commit();
+            }
+            mTabs.put(index.toString(), info);
+            
+            //-- --//
+            if (index > 0) {
+            	tabBarItem.showDivider();
+            }
+            
+        	TabHost.TabSpec tabSpec = mTabHost.newTabSpec(index.toString())
+        			.setIndicator(tabBarItem)
+        			.setContent(new DummyTabFactory(mActivity));        	
+            mTabHost.addTab(tabSpec);           
+        	mTabHost.getTabWidget().getChildAt(index).setOnClickListener(new View.OnClickListener() 
+        	{					
+				@Override
+				public void onClick(View v) {
+	            	onTabSelected(index.toString());
+				}
+			});
+        }     
+        
         public void addTab(BNTabBarItem tabBarItem, BNFragment frag, Bundle args) {
         	
         	final Integer index = mTabHost.getTabWidget().getChildCount();
