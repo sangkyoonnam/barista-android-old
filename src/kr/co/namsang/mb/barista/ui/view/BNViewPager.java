@@ -10,13 +10,12 @@ import android.widget.Scroller;
 
 public class BNViewPager extends ViewPager 
 {
-	public BNViewPager( Context context, AttributeSet attrs) 
-	  {
-	    super( context, attrs );
+	public BNViewPager( Context context, AttributeSet attrs) {
+		super( context, attrs );
 	    setMyScroller();
-	  }
-	  private void setMyScroller() 
-	  {
+	}
+	
+	private void setMyScroller() {
 	    try 
 	    {
 	            Class<?> viewpager = ViewPager.class;
