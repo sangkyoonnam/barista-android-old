@@ -1,6 +1,9 @@
 package kr.co.namsang.mb.barista.util;
 
+import kr.co.namsang.mb.barista.data.Size;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 
 public class UiUtils {
@@ -48,4 +51,34 @@ public class UiUtils {
     	
     	return 0;
     }
+    
+    
+    
+    /**
+     * 
+     * @param width
+     * @param height
+     * @return
+     */
+	public static Size makeSize(int width, int height) {
+		return new Size(width, height);
+	}
+	    
+    
+    
+    
+    //-- --//
+	public static Bitmap createScaledBitmap(int resId, int width, int height) {
+		try {
+			Bitmap bitmap = BitmapFactory.decodeResource(
+					context.getResources(), resId);
+			Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width, height, true);
+			bitmap.recycle();  // 비트맵의 메모리 해제를 직접적으로 요청
+			return scaledBitmap;
+		}
+		catch (Exception e) {
+//			LogUtils.e(LOG_TAG, "error=%s", e.getMessage());
+		}
+		return null;
+	}	
 }

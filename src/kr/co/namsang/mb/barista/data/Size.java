@@ -4,32 +4,10 @@ import android.graphics.Point;
 
 public class Size 
 {
-	public double width = 0;
-	public double height = 0;
-
-	// Constructor
-	public Size() {
-		
-	}
+	public int width, height;
 	
-	public Size(double[] vals) {
-		
-	}
-	
-	public Size(double width, double height) {
-		this.width = width;
-		this.height = height;
-	}
-	
-	public Size(Point p) {
-		
-	}
-	
-	public double getWidth() {
-		return width;
-	}
-	
-	public double getHeight() {
-		return height;
+	public Size(int w, int h) {
+		this.width = w;
+		this.height = h;
 	}
 }
